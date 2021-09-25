@@ -21,36 +21,35 @@ class HomePage extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
 
-            final articles = (state as BlogLoaded);
+            final articleLoadState = (state as BlogLoaded);
+            final articles = articleLoadState.articles.toList();
 
-            return SingleChildScrollView(
-              child: Column(
-                //children: articles.map((e) => _articleDetials(e, context)).toList(),
-              ),
+            return  ListView.builder(
+              itemCount: articles.length,
+              itemBuilder: (context, index) {
+                final articleDetails = articles[index];
+
+                return _articleDetials(articleDetails);
+              },
             );
+            //   SingleChildScrollView(
+            //   child: Column(
+            //     //children: articles.map((e) => _articleDetials(e, context)).toList(),
+            //   ),
+            // );
           },
         ));
   }
 }
 
 
-Widget _articleDetials(Article article, context) {
-  return Container(
-    width: MediaQuery.of(context).size.width,
-    padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      border: Border(
-        bottom: BorderSide(
-          color: Colors.grey.shade200,
-        ),
-      ),
-    ),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(article.title),
-      ],
-    ),
-  );
-}
+Widget _articleDetials(Article article) => ListTile(
+  leading: Image.network(
+    article.thumbnailUrl,
+    fit: BoxFit.cover,
+    width: 50,
+    height: 50,
+  ),
+  title: Text(article.title),
+  subtitle: Text(article.url),
+);
